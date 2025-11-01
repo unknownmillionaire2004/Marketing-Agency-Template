@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Web Creations - Marketing Demo Site</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Apply the font family and smooth scrolling */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; /* slate-800 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; /* slate-700 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; /* slate-600 */
+        }
+        /* Hide spinner arrows on number inputs */
+        input[type='number']::-webkit-inner-spin-button,
+        input[type='number']::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* --- ANIMATIONS --- */
+
+        /* 1. Canvas Background Style */
+        #bg-animation-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            opacity: 0.5;
+        }
+
+        /* 2. Button Shine/Fill Effects */
+        /* These ::after pseudo-elements must remain in CSS */
+        
+        /* Shine effect for btn-primary */
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 20px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(20deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        .btn-primary:hover::after {
+            left: 120%;
+            opacity: 1;
+            transition: all 0.5s ease;
+        }
+        .btn-primary:disabled::after {
+            display: none;
+        }
+
+        /* Fill effect for btn-secondary */
+        .btn-secondary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #4f46e5; /* indigo-600 */
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease-in-out;
+            z-index: -1;
+        }
+        .btn-secondary:hover::after {
+            transform: scaleX(1);
+        }
+        .btn-secondary:disabled::after {
+            display: none;
+        }
+
+
+        /* 3. Scroll-Reveal Animations */
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .section-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 4. Tab Content Style */
+        /* REMOVED: .ai-tab-content style block was here, it's now applied via utility classes */
+
+        /* NEW: Marquee Animation */
+        @keyframes scroll-x {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-100%);
+          }
+        }
+        .marquee {
+          animation: scroll-x 40s linear infinite;
+        }
+
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-100 antialiased">
+
+    <!-- NEW: Canvas for Background Animation -->
+    <canvas id="bg-animation-canvas"></canvas>
+
+    <!-- Header & Navigation -->
+    <header class="bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-800">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" class="flex-shrink-0 flex items-center gap-2">
+                    <svg class="w-8 h-8 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM18.259 15.285L18 14.25l-.259 1.035a3.375 3.375 0 00-2.455 2.456L14.25 18l1.036.259a3.375 3.375 0 002.455 2.456L18 21.75l.259-1.035a3.375 3.375 0 002.456-2.456L21.75 18l-1.035-.259a3.375 3.375 0 00-2.456-2.456z" />
+                    </svg>
+                    <span class="font-bold text-xl">Stellar Web Creations</span>
+                </a>
+                
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="#home" class="text-gray-300 hover:text-indigo-400 transition-colors">Home</a>
+                    <a href="#services" class="text-gray-300 hover:text-indigo-400 transition-colors">Services</a>
+                    <a href="#features" class="text-gray-300 hover:text-indigo-400 transition-colors">Features</a>
+                    <a href="#testimonials" class="text-gray-300 hover:text-indigo-400 transition-colors">Testimonials</a>
+                    <a href="#contact" class="text-gray-300 hover:text-indigo-400 transition-colors">Contact</a>
+                </div>
+                
+                <!-- Desktop CTA -->
+                <div class="hidden md:block">
+                    <!-- CORRECTED: Added all Tailwind classes for btn-primary -->
+                    <a href="#contact" class="btn-primary px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 ease-in-out relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-purple-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg disabled:shadow-black/20">
+                        Get Quote
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white" aria-label="Toggle mobile menu">
+                        <svg id="menu-icon-open" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                        <svg id="menu-icon-close" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-slate-800 border-t border-slate-700">
+            <a href="#home" class="block px-4 py-3 text-gray-300 hover:bg-slate-700 hover:text-indigo-400">Home</a>
+            <a href="#services" class="block px-4 py-3 text-gray-300 hover:bg-slate-700 hover:text-indigo-400">Services</a>
+            <a href="#features" class="block px-4 py-3 text-gray-300 hover:bg-slate-700 hover:text-indigo-400">Features</a>
+            <a href="#testimonials" class="block px-4 py-3 text-gray-300 hover:bg-slate-700 hover:text-indigo-400">Testimonials</a>
+            <a href="#contact" class="block px-4 py-3 text-gray-300 hover:bg-slate-700 hover:text-indigo-400">Contact</a>
+            <a href="#contact" class="block px-4 py-3 m-4 bg-indigo-600 text-white rounded-lg font-medium text-center hover:bg-indigo-700">
+                Get Quote
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="pt-20 pb-20 md:pt-28 md:pb-28 relative overflow-hidden section-reveal">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight">
+                    <span class="block">Websites That Convert.</span>
+                    <span class="block text-indigo-400">Built for You.</span>
+                </h1>
+                <p class="mt-6 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+                    This is a demo showcasing modern, intelligent web experiences. We build digital solutions that learn, adapt, and convert for your business.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+                    <!-- CORRECTED: Added all Tailwind classes for btn-primary -->
+                    <a href="#features" class="btn-primary px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 ease-in-out relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-purple-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg disabled:shadow-black/20">
+                        See AI in Action
+                    </a>
+                    <!-- CORRECTED: Added all Tailwind classes for btn-secondary -->
+                    <a href="#services" class="btn-secondary px-8 py-3 rounded-lg font-medium text-indigo-300 transition-all duration-300 ease-in-out relative overflow-hidden bg-transparent border-2 border-indigo-600 shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-indigo-600/30 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg disabled:shadow-black/20">
+                        Our Services
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: "Trusted By" Section -->
+        <!-- UPDATED: Replaced grid with scrolling marquee -->
+        <section class="py-16 bg-slate-900/50 relative z-10 section-reveal" style="animation-delay: 0.2s;">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-center text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                    Trusted by industry leaders
+                </p>
+                <!-- Logo Cloud Marquee -->
+                <div class="mt-8 relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,_black_15%,_black_85%,_transparent_100%)]">
+                    <div class="flex w-max items-center marquee">
+                        <!-- Logos Set 1 -->
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">TechCorp</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">InnovateIQ</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">Quantum</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">Apex</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">Synergy</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">FutureWave</span>
+                        </div>
+
+                        <!-- Logos Set 2 (Duplicate for seamless loop) -->
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">TechCorp</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">InnovateIQ</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">Quantum</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">Apex</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">Synergy</span>
+                        </div>
+                        <div class="mx-10 flex-shrink-0">
+                            <span class="font-bold text-2xl text-slate-500">FutureWave</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section (Tabs) -->
+        <section id="services" class="py-16 md:py-24 bg-slate-900/50 section-reveal relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold">A New Breed of Web Services</h2>
+                    <p class="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">
+                        We leverage cutting-edge technology to deliver more than just a webpage. We deliver results.
+                    </p>
+                </div>
+
+                <div class="mt-12 max-w-4xl mx-auto">
+                    <!-- Tab Headers -->
+                    <!-- CORRECTED: Added all Tailwind classes for service-tab -->
+                    <div class="flex border-b border-slate-700" role="tablist">
+                        <button class="service-tab flex-grow px-4 py-3 text-center font-semibold text-slate-400 cursor-pointer transition-all duration-300 ease-in-out border-b-2 border-transparent hover:text-slate-200 text-indigo-400 border-indigo-400" data-tab="tab1" role="tab" aria-controls="tab1" aria-selected="true">
+                            AI Content
+                        </button>
+                        <button class="service-tab flex-grow px-4 py-3 text-center font-semibold text-slate-400 cursor-pointer transition-all duration-300 ease-in-out border-b-2 border-transparent hover:text-slate-200" data-tab="tab2" role="tab" aria-controls="tab2" aria-selected="false">
+                            Dynamic Apps
+                        </button>
+                        <button class="service-tab flex-grow px-4 py-3 text-center font-semibold text-slate-400 cursor-pointer transition-all duration-300 ease-in-out border-b-2 border-transparent hover:text-slate-200" data-tab="tab3" role="tab" aria-controls="tab3" aria-selected="false">
+                            Interactive UI/UX
+                        </button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="mt-8">
+                        <!-- Tab 1: AI Content -->
+                        <div id="tab1" class="service-tab-content" role="tabpanel">
+                            <h3 class="text-2xl font-bold text-indigo-400">AI-Generated Content & SEO</h3>
+                            <p class="mt-4 text-slate-300">
+                                Stop guessing what your customers want to read. We use generative AI to create high-quality, relevant, and SEO-optimized blog posts, product descriptions, and landing page copy that resonates with your audience and ranks on search engines.
+                            </p>
+                        </div>
+                        <!-- Tab 2: Dynamic Apps -->
+                        <div id="tab2" class="service-tab-content hidden" role="tabpanel">
+                            <h3 class="text-2xl font-bold text-cyan-400">Dynamic Web Applications</h3>
+                            <p class="mt-4 text-slate-300">
+                                Move beyond static brochures. We build data-driven web applications, custom dashboards, and e-commerce platforms that provide real value. Using modern frameworks and Firebase for backend, we deliver scalable and secure solutions.
+                            </p>
+                        </div>
+                        <!-- Tab 3: Interactive UI/UX -->
+                        <div id="tab3" class="service-tab-content hidden" role="tabpanel">
+                            <h3 class="text-2xl font-bold text-emerald-400">Interactive & Adaptive UI/UX</h3>
+                            <p class="mt-4 text-slate-300">
+                                A great website feels alive. We design and implement interactive elements, micro-animations, and adaptive layouts that respond to user behavior. This creates a delightful and engaging experience that keeps users coming back.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Section: AI Demos -->
+        <section id="features" class="py-16 md:py-24 section-reveal relative z-10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold">
+                        Test Drive Our <span class="text-indigo-400">AI</span> Tools
+                    </h2>
+                    <p class="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">
+                        This isn't just a demo; it's a live demonstration. These tools make **real API calls** to a powerful AI model. This is the technology we can integrate into your projects.
+                    </p>
+                </div>
+
+                <!-- AI Demo Tabs -->
+                <div class="mt-12">
+                    <!-- AI Tab Headers -->
+                    <!-- CORRECTED: Added all Tailwind classes for ai-tab -->
+                    <div class="flex space-x-2" role="tablist">
+                        <button class="ai-tab px-5 py-3 font-medium text-slate-300 cursor-pointer transition-all duration-300 ease-in-out border border-slate-700 rounded-t-lg hover:bg-slate-700 bg-slate-800 text-indigo-400 border-b-transparent" data-ai-tab="ai-tab1" role="tab" aria-controls="ai-tab1" aria-selected="true">
+                            Blog Idea Generator
+                        </button>
+                        <button class="ai-tab px-5 py-3 font-medium text-slate-300 cursor-pointer transition-all duration-300 ease-in-out border border-slate-700 rounded-t-lg hover:bg-slate-700" data-ai-tab="ai-tab2" role="tab" aria-controls="ai-tab2" aria-selected="false">
+                            Ad Copy Generator
+                        </button>
+                    </div>
+
+                    <!-- AI Tab Content -->
+                    <div class="mt-0">
+                        <!-- AI Tab 1: Blog Post Idea Generator -->
+                        <!-- CORRECTED: Removed ai-tab-content class and applied styles directly -->
+                        <div id="ai-tab1" class="bg-slate-800 p-6 rounded-b-lg border border-t-0 border-slate-700" role="tabpanel">
+                            <h3 class="text-xl font-bold text-center">Blog Post Idea Generator</h3>
+                            <p class="text-center text-sm text-slate-400 mt-1">Powered by Modern AI</p>
+                            
+                            <div class="mt-6">
+                                <label for="topic-input" class="block text-sm font-medium text-slate-300">Enter a Topic:</label>
+                                <input type="text" id="topic-input" class="w-full px-4 py-3 mt-1 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., 'Small Business Marketing'">
+                            </div>
+                            
+                            <!-- CORRECTED: Added all Tailwind classes for btn-primary -->
+                            <button id="generate-blog-btn" class="w-full mt-6 btn-primary px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 ease-in-out relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-purple-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg disabled:shadow-black/20">
+                                Generate Ideas
+                            </button>
+                            
+                            <!-- Results Area -->
+                            <div id="blog-results-container" class="mt-6 min-h-[100px]">
+                                <div id="blog-loader" class="text-center text-slate-400 hidden">
+                                    <svg class="animate-spin h-5 w-5 text-white inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Thinking...
+                                </div>
+                                <div id="blog-error-message" class="text-center text-red-400 hidden p-3 bg-red-900/50 rounded-lg"></div>
+                                <div id="blog-results-output" class="text-slate-200"></div>
+                            </div>
+                        </div>
+
+                        <!-- AI Tab 2: Ad Copy Generator -->
+                        <!-- CORRECTED: Removed ai-tab-content class and applied styles directly -->
+                        <div id="ai-tab2" class="bg-slate-800 p-6 rounded-b-lg border border-t-0 border-slate-700 hidden" role="tabpanel">
+                            <h3 class="text-xl font-bold text-center">Ad Copy Generator</h3>
+                            <p class="text-center text-sm text-slate-400 mt-1">Powered by Modern AI</p>
+                            
+                            <div class="mt-6 grid grid-cols-1 gap-4">
+                                <div>
+                                    <label for="product-name" class="block text-sm font-medium text-slate-300">Product/Service Name:</label>
+                                    <input type="text" id="product-name" class="w-full px-4 py-3 mt-1 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., 'Stellar Web Creations'">
+                                </div>
+                                <div>
+                                    <label for="product-desc" class="block text-sm font-medium text-slate-300">Brief Description:</label>
+                                    <textarea id="product-desc" rows="2" class="w-full px-4 py-3 mt-1 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., 'AI-powered website design agency'"></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- CORRECTED: Added all Tailwind classes for btn-primary -->
+                            <button id="generate-ad-btn" class="w-full mt-6 btn-primary px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 ease-in-out relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-purple-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg disabled:shadow-black/20">
+                                Generate Ad Copy
+                            </button>
+                            
+                            <!-- Results Area -->
+                            <div id="ad-results-container" class="mt-6 min-h-[100px]">
+                                <div id="ad-loader" class="text-center text-slate-400 hidden">
+                                    <svg class="animate-spin h-5 w-5 text-white inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Writing...
+                                </div>
+                                <div id="ad-error-message" class="text-center text-red-400 hidden p-3 bg-red-900/50 rounded-lg"></div>
+                                <div id="ad-results-output" class="text-slate-200"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section (Carousel) -->
+        <section id="testimonials" class="py-16 md:py-24 bg-slate-900/50 section-reveal relative z-10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold">Trusted by Innovators</h2>
+                    <p class="mt-4 text-lg text-slate-300">
+                        Don't just take our word for it. Here's what our clients say.
+                    </p>
+                </div>
+
+                <!-- Carousel -->
+                <div class="mt-12 relative overflow-hidden bg-slate-800 p-8 md:p-12 rounded-xl shadow-xl border border-slate-700">
+                    <div id="testimonial-slider" class="relative">
+                        <!-- Testimonials will be injected here by JS -->
+                    </div>
+                    
+                    <!-- Carousel Controls -->
+                    <button id="prev-testimonial" class="absolute left-4 top-1/2 -translate-y-1/2 bg-slate-700/50 hover:bg-slate-600 p-2 rounded-full text-indigo-300 transition-all" aria-label="Previous testimonial">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+                    <button id="next-testimonial" class="absolute right-4 top-1/2 -translate-y-1/2 bg-slate-700/50 hover:bg-slate-600 p-2 rounded-full text-indigo-300 transition-all" aria-label="Next testimonial">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                    
+                    <!-- Carousel Dots -->
+                    <div id="testimonial-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                        <!-- Dots will be injected here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section (Accordion) -->
+        <section id="faq" class="py-16 md:py-24 section-reveal relative z-10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold">Frequently Asked Questions</h2>
+                    <p class="mt-4 text-lg text-slate-300">
+                        Have questions? We have answers.
+                    </p>
+                </div>
+
+                <div class="mt-12 space-y-4" id="faq-accordion">
+                    <!-- FAQ Items will be injected here by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 bg-slate-900/50 relative overflow-hidden section-reveal">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold">Let's Build Together</h2>
+                    <p class="mt-4 text-lg text-slate-300">
+                        Ready to start your next project? Drop us a line.
+                    </p>
+                </div>
+
+                <form id="contact-form" class="mt-12 bg-slate-800 p-8 rounded-xl shadow-2xl border border-slate-700 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
+                    <div>
+                        <label for="first-name" class="block text-sm font-medium text-slate-300">First name</label>
+                        <div class="mt-1">
+                            <input type="text" name="first-name" id="first-name" required class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="last-name" class="block text-sm font-medium text-slate-300">Last name</label>
+                        <div class="mt-1">
+                            <input type="text" name="last-name" id="last-name" required class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label for="email" class="block text-sm font-medium text-slate-300">Email</label>
+                        <div class="mt-1">
+                            <input id="email" name="email" type="email" autocomplete="email" required class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label for="message" class="block text-sm font-medium text-slate-300">Message</label>
+                        <div class="mt-1">
+                            <textarea id="message" name="message" rows="4" required class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                        </div>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <!-- CORRECTED: Added all Tailwind classes for btn-primary -->
+                        <button type="submit" class="w-full inline-flex items-center justify-center btn-primary px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 ease-in-out relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-purple-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg disabled:shadow-black/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-indigo-500">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 relative z-10">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+                <div class="px-5 py-2">
+                    <a href="#home" class="text-base text-gray-400 hover:text-indigo-400">Home</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#services" class="text-base text-gray-400 hover:text-indigo-400">Services</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#features" class="text-base text-gray-400 hover:text-indigo-400">Features</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#faq" class="text-base text-gray-400 hover:text-indigo-400">FAQ</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#contact" class="text-base text-gray-400 hover:text-indigo-400">Contact</a>
+                </div>
+            </nav>
+            <div class="mt-8 flex justify-center space-x-6">
+                <!-- Inline SVG Icons -->
+                <a href="#" class="text-gray-400 hover:text-gray-300">
+                    <span class="sr-only">Facebook</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-gray-300">
+                    <span class="sr-only">Twitter</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                    </svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-gray-300">
+                    <span class="sr-only">LinkedIn</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+            <p class="mt-8 text-center text-base text-gray-500">
+                &copy; 2025 Your Company Name Here. This is a demo website.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Contact Form Success Modal -->
+    <div id="contact-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="bg-slate-800 rounded-lg shadow-2xl max-w-sm w-full p-6 border border-slate-700 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+            </div>
+            <h3 class="text-lg leading-6 font-medium text-white mt-4" id="modal-title">Message Sent!</h3>
+            <div class="mt-2">
+                <p class="text-sm text-slate-300">
+                    Thanks for reaching out! This is just a demo, but in a real app, your message would be on its way.
+                </p>
+            </div>
+            <div class="mt-6">
+                <button id="modal-close-btn" type="button" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-indigo-500">
+                    Got it, thanks!
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================================== -->
+    <!--          JAVASCRIPT AREA           -->
+    <!-- ================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ---------------------------------
+            // 0. NEW: Canvas Background Animation
+            // ---------------------------------
+            const canvas = document.getElementById('bg-animation-canvas');
+            const ctx = canvas.getContext('2d');
+            let particlesArray;
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Particle object
+            class Particle {
+                constructor(x, y, directionX, directionY, size, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.directionX = directionX;
+                    this.directionY = directionY;
+                    this.size = size;
+                    this.color = color;
+                }
+                // Method to draw individual particle
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+                // Check particle position, check mouse position, move the particle, draw the particle
+                update() {
+                    // Check if particle is still within canvas
+                    if (this.x > canvas.width || this.x < 0) {
+                        this.directionX = -this.directionX;
+                    }
+                    if (this.y > canvas.height || this.y < 0) {
+                        this.directionY = -this.directionY;
+                    }
+                    // Move particle
+                    this.x += this.directionX;
+                    this.y += this.directionY;
+                    // Draw particle
+                    this.draw();
+                }
+            }
+
+            // Create particle array
+            function initParticles() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.height * canvas.width) / 9000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2) + 1;
+                    let x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * .4) - .2;
+                    let directionY = (Math.random() * .4) - .2;
+                    let color = 'rgba(165, 180, 252, 0.5)'; // indigo-300 with opacity
+
+                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                }
+            }
+
+            // Animation loop
+            function animateParticles() {
+                requestAnimationFrame(animateParticles);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                }
+                connectParticles();
+            }
+
+            // Check if particles are close enough to draw line between them
+            function connectParticles() {
+                let opacityValue = 1;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                        if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                            opacityValue = 1 - (distance / 20000);
+                            ctx.strokeStyle = `rgba(79, 70, 229, ${opacityValue})`; // indigo-600
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // Resize event
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParticles();
+            });
+            
+            // Start animation
+            initParticles();
+            animateParticles();
+
+
+            // ---------------------------------
+            // 1. Mobile Menu Toggle
+            // ---------------------------------
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('menu-icon-open');
+            const iconClose = document.getElementById('menu-icon-close');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu when a link is clicked
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    iconOpen.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                });
+            });
+
+            // ---------------------------------
+            // 2. Services Tabbed Interface
+            // ---------------------------------
+            const serviceTabs = document.querySelectorAll('.service-tab');
+            const serviceTabContents = document.querySelectorAll('.service-tab-content');
+            // CORRECTED: These are the classes that need to be toggled
+            const serviceTabActiveClasses = ['text-indigo-400', 'border-indigo-400'];
+
+            serviceTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Deactivate all tabs
+                    serviceTabs.forEach(t => t.classList.remove(...serviceTabActiveClasses));
+                    // Hide all content
+                    serviceTabContents.forEach(c => c.classList.add('hidden'));
+
+                    // Activate clicked tab
+                    tab.classList.add(...serviceTabActiveClasses);
+                    // Show corresponding content
+                    const contentId = tab.getAttribute('data-tab');
+                    document.getElementById(contentId).classList.remove('hidden');
+                });
+            });
+
+            // ---------------------------------
+            // 3. Testimonial Carousel
+            // ---------------------------------
+            const testimonials = [
+                {
+                    quote: "This team transformed our online presence. Their AI-driven approach to content is unlike anything we've ever seen. Our traffic is up 300%!",
+                    name: "Alice Smith",
+                    title: "CEO, TechStrive"
+                },
+                {
+                    quote: "The interactivity and speed of the web app they built for us is world-class. It feels less like a website and more like a native application.",
+                    name: "David Lee",
+                    title: "COO, FutureGadgets"
+                },
+                {
+                    quote: "I was skeptical about 'AI-powered' design, but the results speak for themselves. The user engagement on our new site is through the roof.",
+                    name: "Emily Rodriguez",
+                    title: "Marketing Director, InnovateCo"
+                }
+            ];
+            
+            let currentTestimonial = 0;
+            const slider = document.getElementById('testimonial-slider');
+            const dotsContainer = document.getElementById('testimonial-dots');
+            const prevBtn = document.getElementById('prev-testimonial');
+            const nextBtn = document.getElementById('next-testimonial');
+
+            function showTestimonial(index) {
+                const testimonial = testimonials[index];
+                
+                // Create testimonial content
+                const content = document.createElement('div');
+                content.className = 'testimonial-item text-center';
+                content.innerHTML = `
+                    <blockquote class="text-xl md:text-2xl font-medium text-slate-200">
+                        "&hellip;${testimonial.quote}&rdquo;
+                    </blockquote>
+                    <footer class="mt-6">
+                        <div class="font-bold text-indigo-300">${testimonial.name}</div>
+                        <div class="text-sm text-slate-400">${testimonial.title}</div>
+                    </footer>
+                `;
+                
+                // Clear slider and add new content with animation
+                slider.innerHTML = '';
+                slider.appendChild(content);
+                
+                // Update dots
+                const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+                dots.forEach(dot => dot.classList.remove('active-dot'));
+                dots[index].classList.add('active-dot');
+
+                currentTestimonial = index;
+            }
+
+            // Create dots
+            testimonials.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = 'testimonial-dot';
+                dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
+                dot.addEventListener('click', () => showTestimonial(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            // Add utility classes for dots
+            const dotStyle = document.createElement('style');
+            dotStyle.innerHTML = `
+                .testimonial-dot {
+                    width: 0.75rem;
+                    height: 0.75rem;
+                    background-color: #475569; /* slate-600 */
+                    border-radius: 9999px;
+                    transition: all 0.3s ease;
+                }
+                .testimonial-dot:hover {
+                    background-color: #64748b; /* slate-500 */
+                }
+                .testimonial-dot.active-dot {
+                    background-color: #818cf8; /* indigo-400 */
+                    transform: scale(1.1);
+                }
+                /* Fade-in animation */
+                .testimonial-item {
+                    animation: fadeIn 0.5s ease-in-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(dotStyle);
+
+            // Carousel button logic
+            prevBtn.addEventListener('click', () => {
+                const newIndex = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+                showTestimonial(newIndex);
+            });
+
+            nextBtn.addEventListener('click', () => {
+                const newIndex = (currentTestimonial + 1) % testimonials.length;
+                showTestimonial(newIndex);
+            });
+
+            // Auto-play
+            let autoPlay = setInterval(() => {
+                nextBtn.click();
+            }, 5000);
+
+            // Pause auto-play on hover
+            slider.parentElement.addEventListener('mouseenter', () => clearInterval(autoPlay));
+            slider.parentElement.addEventListener('mouseleave', () => {
+                autoPlay = setInterval(() => {
+                    nextBtn.click();
+                }, 5000);
+            });
+
+            // Show first testimonial
+            showTestimonial(0);
+            
+            // ---------------------------------
+            // 4. FAQ Accordion
+            // ---------------------------------
+            const faqs = [
+                {
+                    question: "What does 'AI-Powered Website' actually mean?",
+                    answer: "It means we use artificial intelligence at every step. This includes generating optimized content, personalizing user experiences, and even analyzing data to suggest design improvements. It's a smarter, data-driven approach to web design."
+                },
+                {
+                    question: "How long does a project typically take?",
+                    answer: "A standard marketing website takes about 4-6 weeks from initial design to launch. More complex web applications can take 2-4 months. We prioritize quality and thorough testing."
+                },
+                {
+                    question: "Can you integrate this AI with our existing systems?",
+                    answer: "Absolutely. We specialize in API integrations. We can connect our AI features to your existing CRM, e-commerce platform, or database to create a seamless, intelligent system."
+                },
+                {
+                    question: "Do I get to talk to a human?",
+                    answer: "Yes! While we love AI, our team of expert designers, developers, and project managers are 100% human. You'll have a dedicated project manager from start to finish."
+                }
+            ];
+
+            const accordionContainer = document.getElementById('faq-accordion');
+            
+            faqs.forEach((faq, index) => {
+                const item = document.createElement('div');
+                item.className = 'border border-slate-700 rounded-lg overflow-hidden';
+                item.innerHTML = `
+                    <h3>
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5 bg-slate-800 hover:bg-slate-700 transition-colors" aria-expanded="false" aria-controls="faq-answer-${index}">
+                            <span class="font-medium text-lg text-slate-100">${faq.question}</span>
+                            <svg class="faq-icon w-5 h-5 text-slate-400 transition-transform transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </h3>
+                    <div id="faq-answer-${index}" class="faq-answer hidden p-5 pt-0">
+                        <p class="text-slate-300">${faq.answer}</p>
+                    </div>
+                `;
+                accordionContainer.appendChild(item);
+            });
+            
+            // Add accordion logic
+            accordionContainer.addEventListener('click', (e) => {
+                const questionBtn = e.target.closest('.faq-question');
+                if (!questionBtn) return;
+
+                const answer = document.getElementById(questionBtn.getAttribute('aria-controls'));
+                const icon = questionBtn.querySelector('.faq-icon');
+                const isExpanded = questionBtn.getAttribute('aria-expanded') === 'true';
+                
+                // Toggle current accordion
+                questionBtn.setAttribute('aria-expanded', !isExpanded);
+                answer.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+            
+            // Add utility classes for accordion
+            const accordionStyle = document.createElement('style');
+            accordionStyle.innerHTML = `
+                .faq-answer {
+                    animation: fadeIn 0.3s ease-out;
+                }
+                .faq-icon.rotate-180 {
+                    transform: rotate(180deg);
+                }
+            `;
+            document.head.appendChild(accordionStyle);
+
+            // ---------------------------------
+            // 5. Contact Form Modal
+            // ---------------------------------
+            const contactForm = document.getElementById('contact-form');
+            const contactModal = document.getElementById('contact-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Prevent actual form submission
+                contactModal.classList.remove('hidden');
+                contactForm.reset();
+            });
+
+            modalCloseBtn.addEventListener('click', () => {
+                contactModal.classList.add('hidden');
+            });
+            
+            // Close modal by clicking background
+            contactModal.addEventListener('click', (e) => {
+                if (e.target === contactModal) {
+                    contactModal.classList.add('hidden');
+                }
+            });
+
+            // ---------------------------------
+            // 6. Scroll-Reveal Animations
+            // ---------------------------------
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { 
+                threshold: 0.1 
+            });
+
+            document.querySelectorAll('.section-reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // ---------------------------------
+            // 7. Advanced AI Demo Features
+            // ---------------------------------
+
+            // --- AI Tab Interface ---
+            const aiTabs = document.querySelectorAll('.ai-tab');
+            const aiTabContents = document.querySelectorAll('.ai-tab-content');
+            // CORRECTED: These are the classes that need to be toggled
+            const aiTabActiveClasses = ['bg-slate-800', 'text-indigo-400', 'border-b-transparent'];
+
+
+            aiTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    aiTabs.forEach(t => t.classList.remove(...aiTabActiveClasses));
+                    aiTabContents.forEach(c => c.classList.add('hidden'));
+
+                    tab.classList.add(...aiTabActiveClasses);
+                    const contentId = tab.getAttribute('data-ai-tab');
+                    document.getElementById(contentId).classList.remove('hidden');
+                });
+            });
+
+            // --- API Call Logic ---
+            const API_KEY = ""; // Kept as empty string, will be populated by the environment
+            // CORRECTED: Added https://
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+
+            // Exponential Backoff Retry Utility
+            async function withRetry(apiCall, maxRetries = 3, baseDelay = 1000) {
+                let retries = 0;
+                while (retries < maxRetries) {
+                    try {
+                        const result = await apiCall();
+                        return result;
+                    } catch (error) {
+                        retries++;
+                        if (retries >= maxRetries) {
+                            throw error;
+                        }
+                        const delay = baseDelay * Math.pow(2, retries - 1);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    }
+                }
+            }
+
+            // Refactored, reusable API call function
+            async function callGeminiAPI(userPrompt, systemPrompt) {
+                const payload = {
+                    contents: [
+                        { parts: [{ text: userPrompt }] }
+                    ],
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    },
+                    generationConfig: {
+                        temperature: 0.8,
+                        topK: 1,
+                        topP: 1,
+                        maxOutputTokens: 2048,
+                    }
+                };
+
+                const apiCall = async () => {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        const errorBody = await response.json();
+                        console.error("API Error Response:", errorBody);
+                        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                };
+                return await withRetry(apiCall);
+            }
+
+            // --- Tool 1: Blog Post Generator ---
+            const generateBlogBtn = document.getElementById('generate-blog-btn');
+            const topicInput = document.getElementById('topic-input');
+            const blogLoader = document.getElementById('blog-loader');
+            const blogErrorMessage = document.getElementById('blog-error-message');
+            const blogResultsOutput = document.getElementById('blog-results-output');
+
+            generateBlogBtn.addEventListener('click', async () => {
+                const topic = topicInput.value.trim();
+                if (!topic) {
+                    showError(blogErrorMessage, "Please enter a topic.");
+                    return;
+                }
+                setLoading(true, generateBlogBtn, blogLoader, blogErrorMessage, blogResultsOutput);
+
+                const systemPrompt = "You are a world-class marketing and content strategist. A user will provide a topic. Your task is to generate 5 engaging, click-worthy blog post titles based on that topic. Respond ONLY with the 5 titles, each on a new line. Do not add any extra text, introduction, or conclusion.";
+                
+                try {
+                    const result = await callGeminiAPI(topic, systemPrompt);
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        displayResults(blogResultsOutput, text, "Here are your ideas:", true);
+                    } else {
+                        console.error("Unexpected API response structure:", result);
+                        showError(blogErrorMessage, "Could not parse the response from the AI.");
+                    }
+                } catch (error) {
+                    console.error("Error calling Gemini API:", error);
+                    showError(blogErrorMessage, "An API error occurred. Please try again later.");
+                } finally {
+                    setLoading(false, generateBlogBtn, blogLoader);
+                }
+            });
+
+            // --- Tool 2: Ad Copy Generator ---
+            const generateAdBtn = document.getElementById('generate-ad-btn');
+            const productNameInput = document.getElementById('product-name');
+            const productDescInput = document.getElementById('product-desc');
+            const adLoader = document.getElementById('ad-loader');
+            const adErrorMessage = document.getElementById('ad-error-message');
+            const adResultsOutput = document.getElementById('ad-results-output');
+
+            generateAdBtn.addEventListener('click', async () => {
+                const productName = productNameInput.value.trim();
+                const productDesc = productDescInput.value.trim();
+                if (!productName || !productDesc) {
+                    showError(adErrorMessage, "Please fill in both fields.");
+                    return;
+                }
+                setLoading(true, generateAdBtn, adLoader, adErrorMessage, adResultsOutput);
+
+                const userPrompt = `Product Name: ${productName}\nDescription: ${productDesc}`;
+                const systemPrompt = "You are an expert copywriter. A user will provide a product name and a brief description. Your task is to generate 3 short, punchy ad headlines (max 10 words) and 3 short ad descriptions (max 30 words) for a social media campaign. Format the response clearly using markdown, with '### Headlines' and '### Descriptions' as titles.";
+                
+                try {
+                    const result = await callGeminiAPI(userPrompt, systemPrompt);
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        displayResults(adResultsOutput, text, "", false); // Display raw, formatted text
+                    } else {
+                        console.error("Unexpected API response structure:", result);
+                        showError(adErrorMessage, "Could not parse the response from the AI.");
+                    }
+                } catch (error) {
+                    console.error("Error calling Gemini API:", error);
+                    showError(adErrorMessage, "An API error occurred. Please try again later.");
+                } finally {
+                    setLoading(false, generateAdBtn, adLoader);
+                }
+            });
+
+
+            // --- Helper Functions for AI Tools ---
+            function setLoading(isLoading, button, loader, errorEl, outputEl) {
+                if (isLoading) {
+                    button.disabled = true;
+                    loader.classList.remove('hidden');
+                    if (errorEl) errorEl.classList.add('hidden');
+                    if (outputEl) outputEl.innerHTML = '';
+                } else {
+                    button.disabled = false;
+                    loader.classList.add('hidden');
+                }
+            }
+
+            function showError(errorEl, message) {
+                errorEl.textContent = message;
+                errorEl.classList.remove('hidden');
+            }
+
+            function displayResults(outputEl, text, title, asList = true) {
+                let html = '';
+                if (title) {
+                    html += `<h4 class="font-semibold text-slate-100 mb-3">${title}</h4>`;
+                }
+
+                if (asList) {
+                    const items = text.split('\n').filter(item => item.trim().length > 0);
+                    html += `<ul class="list-disc list-inside space-y-2 text-slate-300">
+                                ${items.map(item => `<li>${item.replace(/^\d+\.\s*/, '')}</li>`).join('')}
+                             </ul>`;
+                } else {
+                    // Simple markdown to HTML for Ad Copy
+                    html += text
+                        .replace(/### (.*)/g, '<h4 class="font-semibold text-slate-100 mt-4 mb-2">$1</h4>')
+                        .replace(/\* (.*)/g, '<li class="ml-4 list-disc">$1</li>') // Added list-disc
+                        .replace(/\n/g, '<br>')
+                        .replace(/<br><br>/g, '<br>') // prevent double breaks
+                        .replace(/<br><li/g, '<li'); // prevent break before list item
+                }
+                outputEl.innerHTML = html;
+            }
+
+        });
+    </script>
+</body>
+</html>
+
+
+
